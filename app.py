@@ -4,7 +4,7 @@ import streamlit.components.v1 as components
 # 1. Sayfa Ayarları
 st.set_page_config(page_title="İsmail Stili Pro", page_icon="🦁", layout="centered")
 
-# 2. HTML ve JS Kodu (Aşağıdaki üç tırnak ile başlar, en alttaki üç tırnak ile biter. Asla silmeyin!)
+# 2. HTML ve JS Kodu
 calc_html = """
 <!DOCTYPE html>
 <html>
@@ -14,34 +14,35 @@ calc_html = """
         body { background-color: #000; font-family: -apple-system, sans-serif; display: flex; justify-content: center; padding-top: 10px; overflow: hidden; margin: 0; }
         .calc-body { width: 330px; background-color: #000; border-radius: 20px; padding: 10px; position: relative; }
         
-        /* Galatasaray Arması */
+        /* SOL ÜST KÖŞEYE SABİTLENMİŞ LOGO */
         .gs-logo {
-            position: absolute; top: 10px; right: 10px;
+            position: absolute; top: 15px; left: 15px;
             width: 45px; height: 45px;
             background-image: url('https://upload.wikimedia.org/wikipedia/en/thumb/4/49/Galatasaray_SK_football_logo.png/960px-Galatasaray_SK_football_logo.png');
             background-size: contain; background-repeat: no-repeat;
             border-radius: 50%;
             box-shadow: 0 0 12px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 0, 0, 0.6);
-            z-index: 100;
+            z-index: 10;
         }
 
         #display {
-            width: 100%; height: 75px; background: #000; color: white;
-            text-align: right; font-size: 42px; border: none; margin-bottom: 15px; outline: none;
+            width: 100%; height: 80px; background: #000; color: white;
+            text-align: right; font-size: 45px; border: none; margin-bottom: 10px; outline: none;
+            padding-right: 5px; box-sizing: border-box;
         }
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
         button {
             height: 58px; width: 100%; border-radius: 50%; border: none;
-            font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s;
+            font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.1s;
             display: flex; justify-content: center; align-items: center;
         }
-        button:active { opacity: 0.6; transform: scale(0.95); }
+        button:active { opacity: 0.6; transform: scale(0.92); }
         
         /* Renkler */
         .num { background-color: #333333; color: white; }
-        .op { background-color: #E30613; color: white; font-size: 22px; } /* Galatasaray Kırmızısı */
-        .func { background-color: #FDB912; color: black; font-size: 18px; } /* Galatasaray Sarısı */
-        .spec { background-color: #1a1a1a; color: #FDB912; font-size: 15px; border: 1px solid #444; }
+        .op { background-color: #E30613; color: white; font-size: 22px; } 
+        .func { background-color: #FDB912; color: black; font-size: 18px; } 
+        .spec { background-color: #1a1a1a; color: #FDB912; font-size: 14px; border: 1px solid #444; }
         .equal { background-color: #FFFFFF; color: #000; font-size: 24px; }
     </style>
 </head>
@@ -52,7 +53,7 @@ calc_html = """
         
         <div class="grid">
             <button class="spec" onclick="add('**')">xʸ</button>
-            <button class="spec" onclick="add('**0.5')">√x</button>
+            <button class="spec" onclick="sqrt()">√x</button>
             <button class="spec" onclick="add('**2')">x²</button>
             <button class="func" onclick="cls()">AC</button>
             <button class="op" onclick="add('/')">÷</button>
@@ -89,6 +90,7 @@ calc_html = """
         }
         function cls() { disp.value = '0'; }
         function del() { disp.value = disp.value.slice(0,-1); if(disp.value=='') disp.value='0'; }
+        function sqrt() { try { disp.value = Math.sqrt(eval(disp.value)).toFixed(2); } catch { disp.value = 'Hata'; } }
         function calc() {
             try { 
                 let res = eval(disp.value);
@@ -102,20 +104,11 @@ calc_html = """
 """
 
 # 3. Arayüz Başlığı
-st.markdown(
-    """
-    <h2 style='text-align: center; color: #FDB912; font-family: sans-serif; text-shadow: 0 0 10px #E30613; margin-bottom: 5px;'>
-        🔥 İSMAİL STİLİ PRO 🔥
-    </h2>
-    """,
-    unsafe_allow_html=True,
-)
+st.markdown("<h2 style='text-align: center; color: #FDB912; font-family: sans-serif; text-shadow: 0 0 10px #E30613;'>🔥 İSMAİL STİLİ PRO 🔥</h2>", unsafe_allow_html=True)
 
 # 4. Hesap Makinesini Ekrana Bas
 components.html(calc_html, height=480)
 
-# 5. Alt Bilgi
-st.markdown(
-    "<p style='text-align: center; color: #888; font-size: 14px;'>🦁 Galatasaray Sevdasıyla Geliştirildi.</p>", 
-    unsafe_allow_html=True
-)
+# 5. Alt Bilgi (İsteğin Üzerine Güncellendi)
+st.markdown("<h4 style='text-align: center; color: white;'>Geliştiren: İsmail Orhan</h4>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #888; font-size: 14px;'>🦁 Galatasaray Sevdasıyla Geliştirildi.</p>", unsafe_allow_html=True)
