@@ -102,7 +102,7 @@ calc_html = """
 """
 
 # 3. Arayüz Başlığı
-st.markdown("<h2 style='text-align: center; color: #FDB912; text-shadow: 0 0 10px #E30613;'>🔥 İSMAİL STİLİ PRO 🔥</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center; color: #FDB912; text-shadow: 0 0 10px #E30613;'>🦁 GALATASARAY HESAP MAKİNESİ 🦁 </h2>", unsafe_allow_html=True)
 
 # 4. Hesap Makinesi
 components.html(calc_html, height=480)
