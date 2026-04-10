@@ -48,3 +48,65 @@ calc_html = """
     <div class="calc-body">
         <div class="gs-logo"></div>
         <input type="text" id="display" value="0" disabled>
+        
+        <div class="grid">
+            <button class="spec" onclick="add('**')">xʸ</button>
+            <button class="spec" onclick="sqrt()">√x</button>
+            <button class="spec" onclick="add('**2')">x²</button>
+            <button class="func" onclick="cls()">AC</button>
+            <button class="op" onclick="add('/')">÷</button>
+            
+            <button class="num" onclick="add('7')">7</button>
+            <button class="num" onclick="add('8')">8</button>
+            <button class="num" onclick="add('9')">9</button>
+            <button class="func" onclick="del()">DEL</button>
+            <button class="op" onclick="add('*')">×</button>
+            
+            <button class="num" onclick="add('4')">4</button>
+            <button class="num" onclick="add('5')">5</button>
+            <button class="num" onclick="add('6')">6</button>
+            <button class="num" onclick="add('%')">%</button>
+            <button class="op" onclick="add('-')">−</button>
+            
+            <button class="num" onclick="add('1')">1</button>
+            <button class="num" onclick="add('2')">2</button>
+            <button class="num" onclick="add('3')">3</button>
+            <button class="num" onclick="add('.')">.</button>
+            <button class="op" onclick="add('+')">+</button>
+            
+            <button class="num" style="grid-column: span 2; border-radius: 30px;" onclick="add('0')">0</button>
+            <button style="visibility: hidden;"></button>
+            <button class="equal" style="grid-column: span 2; border-radius: 30px;" onclick="calc()">=</button>
+        </div>
+    </div>
+
+    <script>
+        let disp = document.getElementById('display');
+        function add(v) { 
+            if(disp.value == '0' || disp.value == 'Hata') disp.value = v;
+            else disp.value += v;
+        }
+        function cls() { disp.value = '0'; }
+        function del() { disp.value = disp.value.slice(0,-1); if(disp.value=='') disp.value='0'; }
+        function sqrt() { try { disp.value = Math.sqrt(eval(disp.value)).toFixed(2); } catch { disp.value = 'Hata'; } }
+        function calc() {
+            try { 
+                let res = eval(disp.value);
+                disp.value = Number.isInteger(res) ? res : res.toFixed(4);
+            }
+            catch { disp.value = 'Hata'; }
+        }
+    </script>
+</body>
+</html>
+"""
+
+# 3. Arayüz Başlığı
+st.markdown("<h2 style='text-align: center; color: #FDB912; text-shadow: 0 0 10px #E30613;'>🔥 İSMAİL STİLİ PRO 🔥</h2>", unsafe_allow_html=True)
+
+# 4. Hesap Makinesi
+components.html(calc_html, height=480)
+
+# 5. Alt İmza (Senin İstediğin Şekilde)
+st.markdown("<h3 style='text-align: center; color: white; margin-top: 0;'>Geliştiren: İsmail Orhan</h3>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #888; font-size: 14px;'>🦁 Bursa / Gemlik - Şampiyonun Hesap Makinesi</p>", unsafe_allow_html=True)
