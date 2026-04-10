@@ -1,114 +1,82 @@
 import streamlit as st
+import streamlit.components.v1 as components
 
-# 1. Sayfa Ayarları
+# Sayfa Ayarları
 st.set_page_config(page_title="Pro Calculator", page_icon="🔢", layout="centered")
 
-# 2. HİÇ BOZULMAYAN MOBİL GRID TASARIMI (CSS)
-st.markdown("""
+# --- HESAP MAKİNESİ HTML & JS KODU ---
+calc_html = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-    /* Ana ekranı ve butonları sabitle */
-    .stApp { background-color: #000000; }
-    
-    .calc-container {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 8px;
-        max-width: 400px;
-        margin: auto;
-    }
-    
-    .stButton > button {
-        width: 100% !important;
-        height: 60px !important;
-        border-radius: 12px !important;
-        font-size: 20px !important;
-        font-weight: bold !important;
-        border: none !important;
-    }
-
-    /* Sayı Butonları (Koyu Gri) */
-    div.stButton > button:not([kind="primary"]):not([kind="secondary"]) {
-        background-color: #333333 !important;
-        color: white !important;
-    }
-
-    /* İşlem Butonları (Turuncu - 5. Sütun) */
-    .orange-btn button {
-        background-color: #ff9500 !important;
-        color: white !important;
-    }
-
-    /* Üst Butonlar (Açık Gri) */
-    .gray-btn button {
-        background-color: #a5a5a5 !important;
-        color: black !important;
-    }
-
-    /* Ekran Tasarımı */
-    .display {
-        background-color: #1c1c1c;
-        color: white;
-        padding: 30px 15px;
-        border-radius: 15px;
-        font-size: 45px;
-        text-align: right;
-        font-family: sans-serif;
-        margin-bottom: 20px;
-        min-height: 100px;
-        word-wrap: break-word;
-    }
+        body { background-color: #000; font-family: -apple-system, sans-serif; display: flex; justify-content: center; padding-top: 20px; }
+        .calc-body { width: 320px; background-color: #000; border-radius: 20px; padding: 10px; }
+        #display {
+            width: 100%; height: 80px; background: #000; color: white;
+            text-align: right; font-size: 50px; border: none; margin-bottom: 20px; outline: none;
+        }
+        .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+        button {
+            height: 55px; width: 55px; border-radius: 50%; border: none;
+            font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        button:active { opacity: 0.7; }
+        .num { background-color: #333; color: white; }
+        .op { background-color: #ff9500; color: white; }
+        .func { background-color: #a5a5a5; color: black; }
+        .special { background-color: #333; color: white; font-size: 14px; }
     </style>
-    """, unsafe_allow_html=True)
+</head>
+<body>
+    <div class="calc-body">
+        <input type="text" id="display" value="0" disabled>
+        <div class="grid">
+            <button class="num" onclick="add('7')">7</button>
+            <button class="num" onclick="add('8')">8</button>
+            <button class="num" onclick="add('9')">9</button>
+            <button class="func" onclick="cls()">AC</button>
+            <button class="op" onclick="add('/')">÷</button>
+            
+            <button class="num" onclick="add('4')">4</button>
+            <button class="num" onclick="add('5')">5</button>
+            <button class="num" onclick="add('6')">6</button>
+            <button class="func" onclick="del()">DEL</button>
+            <button class="op" onclick="add('*')">×</button>
+            
+            <button class="num" onclick="add('1')">1</button>
+            <button class="num" onclick="add('2')">2</button>
+            <button class="num" onclick="add('3')">3</button>
+            <button class="special" onclick="add('/100')">%</button>
+            <button class="op" onclick="add('-')">−</button>
+            
+            <button class="num" onclick="add('0')">0</button>
+            <button class="num" onclick="add('00')">00</button>
+            <button class="num" onclick="add('.')">.</button>
+            <button class="op" style="background-color: #fff; color: #000;" onclick="calc()">=</button>
+            <button class="op" onclick="add('+')">+</button>
+        </div>
+    </div>
 
-# 3. Hesap Makinesi Mantığı
-if 'ifade' not in st.session_state:
-    st.session_state.ifade = ""
+    <script>
+        let disp = document.getElementById('display');
+        function add(v) { 
+            if(disp.value == '0' || disp.value == 'Hata') disp.value = v;
+            else disp.value += v;
+        }
+        function cls() { disp.value = '0'; }
+        function del() { disp.value = disp.value.slice(0,-1); if(disp.value=='') disp.value='0'; }
+        function calc() {
+            try { disp.value = eval(disp.value); }
+            catch { disp.value = 'Hata'; }
+        }
+    </script>
+</body>
+</html>
+"""
 
-def ekle(tus):
-    st.session_state.ifade += str(tus)
-
-def temizle():
-    st.session_state.ifade = ""
-
-def sil():
-    st.session_state.ifade = st.session_state.ifade[:-1]
-
-def hesapla():
-    try:
-        islem = st.session_state.ifade.replace('×', '*').replace('÷', '/')
-        sonuc = eval(islem)
-        if sonuc == int(sonuc): sonuc = int(sonuc)
-        st.session_state.ifade = str(sonuc)
-    except:
-        st.session_state.ifade = "Hata"
-
-# 4. Arayüz Başlığı
-st.markdown("<h2 style='text-align: center; color: white;'>Pro Calculator</h2>", unsafe_allow_html=True)
-
-# Ekran
-st.markdown(f'<div class="display">{st.session_state.ifade if st.session_state.ifade else "0"}</div>', unsafe_allow_html=True)
-
-# 5. BUTONLAR (Sıralı ve Bozulmaz)
-# Her satırı ayrı sütun grupları olarak tanımlıyoruz
-def create_row(buttons, types):
-    cols = st.columns(5)
-    for i in range(5):
-        with cols[i]:
-            btn_label = buttons[i]
-            if btn_label == "AC":
-                st.button(btn_label, on_click=temizle, key=f"btn_{btn_label}")
-            elif btn_label == "DEL":
-                st.button(btn_label, on_click=sil, key=f"btn_{btn_label}")
-            elif btn_label == "=":
-                st.button(btn_label, on_click=hesapla, type="primary", key=f"btn_{btn_label}")
-            else:
-                # 5. Sütun turuncu olsun diye özel class (Simüle edilmiş)
-                st.button(btn_label, on_click=ekle, args=(btn_label,), key=f"btn_{i}_{btn_label}")
-
-# Buton Dizilimi
-create_row(["7", "8", "9", "AC", "÷"], ["n", "n", "n", "g", "o"])
-create_row(["4", "5", "6", "DEL", "×"], ["n", "n", "n", "g", "o"])
-create_row(["1", "2", "3", "%", "-"], ["n", "n", "n", "n", "o"])
-create_row(["0", "00", ".", "=", "+"], ["n", "n", "n", "p", "o"])
-
-st.markdown("<p style='text-align: center; color: #555;'>Geliştirici: İsmail Orhan</p>", unsafe_allow_html=True)
+# Arayüzü Başlat
+st.markdown("<h2 style='text-align: center;'>Pro Calculator</h2>", unsafe_allow_html=True)
+components.html(calc_html, height=500)
+st.caption("<p style='text-align: center;'>Geliştirici: İsmail Orhan</p>", unsafe_allow_html=True)
