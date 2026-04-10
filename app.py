@@ -1,33 +1,65 @@
 import streamlit as st
+import math
 
-# Sayfa Ayarları
-st.set_page_config(page_title="İsmail Orhan Hesap Makinesi", page_icon="🔢")
+# 1. Sayfa Ayarları
+st.set_page_config(page_title="İsmail Pro-Calculator", page_icon="🔢")
 
-# --- GELİŞTİRİCİ KISMI DÜZELTİLMİŞ HALİ ---
-# 'renk' yerine 'color' ve 'gri' yerine 'gray' kullanıyoruz
-st.markdown("<h4 style='text-align: center; color: gray;'>🚀 Bu program <b>İSMAİL ORHAN</b> tarafından geliştirilmiştir</h4>", unsafe_allow_html=True)
+# --- CSS İLE MODERN GÖRÜNÜM (Butonları güzelleştirelim) ---
+st.markdown("""
+    <style>
+    div.stButton > button {
+        width: 100%;
+        height: 60px;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 10px;
+        background-color: #f0f2f6;
+        color: #31333F;
+        border: 1px solid #d1d5db;
+    }
+    div.stButton > button:active { background-color: #FF4B4B; color: white; }
+    .display {
+        background-color: #1E1E1E;
+        color: #00FF00;
+        padding: 20px;
+        border-radius: 10px;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 32px;
+        text-align: right;
+        margin-bottom: 20px;
+        border: 2px solid #333;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-st.title("🔢 Profesyonel Hesap Makinesi")
-st.markdown("---")
+# 2. Hesap Makinesi Hafızası (Session State)
+if 'result' not in st.session_state:
+    st.session_state.result = ""
 
-# Sayı girişleri
-s1 = st.number_input("1. Sayı", value=0.0)
-s2 = st.number_input("2. Sayı", value=0.0)
+def add_to_expr(char):
+    st.session_state.result += str(char)
 
-islem = st.selectbox("Yapılacak İşlem", ["Toplama (+)", "Çıkarma (-)", "Çarpma (*)", "Bölme (/)"])
+def clear_expr():
+    st.session_state.result = ""
 
-st.write("")
+def calculate():
+    try:
+        # eval() fonksiyonu matematiksel diziyi hesaplar
+        # Güvenlik için sadece matematiksel karakterlere izin verilir
+        res = eval(st.session_state.result.replace('x', '*').replace('÷', '/'))
+        st.session_state.result = str(res)
+    except:
+        st.session_state.result = "Hata"
 
-if st.button("HESAPLA", use_container_width=True, type="primary"):
-    if "Toplama" in islem:
-        sonuc = s1 + s2
-    elif "Çıkarma" in islem:
-        sonuc = s1 - s2
-    elif "Çarpma" in islem:
-        sonuc = s1 * s2
-    elif "Bölme" in islem:
-        sonuc = s1 / s2 if s2 != 0 else "Hata: 0'a Bölme!"
-    
-    st.success(f"### Sonuç: {sonuc}")
-    if not isinstance(sonuc, str):
-        st.balloons()
+# 3. Ana Arayüz
+st.title("🔢 Pro Calculator")
+st.caption("Geliştirici: **İsmail Orhan**")
+
+# Ekran (Sonucu gösteren alan)
+st.markdown(f'<div class="display">{st.session_state.result if st.session_state.result else "0"}</div>', unsafe_allow_html=True)
+
+# 4. Buton Takımı (Grid Yapısı)
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    if st.button("C"): clear_expr
