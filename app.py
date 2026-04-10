@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 # 1. Sayfa Ayarları
-st.set_page_config(page_title="İsmail Stili Pro", page_icon="🦁", layout="centered")
+st.set_page_config(page_title="İsmail Stili Hesap Makinesi", page_icon="🦁", layout="centered")
 
 # 2. HTML ve JS Kodu
 calc_html = """
@@ -109,4 +109,4 @@ components.html(calc_html, height=480)
 
 # 5. Alt İmza (Senin İstediğin Şekilde)
 st.markdown("<h3 style='text-align: center; color: white; margin-top: 0;'>Geliştiren: İsmail Orhan</h3>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #888; font-size: 14px;'>🦁 Bursa / Gemlik - Şampiyonun Hesap Makinesi</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #888; font-size: 14px;'>🦁 Bursa / Gemlik - Şampiyonun Hesap Makinesi İSMAİL ORHAN </p>", unsafe_allow_html=True)
